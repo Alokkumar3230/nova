@@ -1,0 +1,17 @@
+{
+  "overview": "NOVA is a full-stack project management app where teams plan, collaborate, and deliver with projects, tasks, a Kanban board, and progress dashboards.",
+  "features": [
+    "Sign in with Internet Identity and manage Admin/Member roles",
+    "Create, edit, and manage projects with team members",
+    "Track tasks on a drag-and-drop Kanban board",
+    "Comment on tasks and follow a per-project activity log",
+    "View dashboards with progress bars and overdue task tracking"
+  ],
+  "category": "productivity",
+  "tags": [
+    "project-management",
+    "productivity",
+    "collaboration"
+  ],
+  "last_updated": "2026-09-06T11:51:28.734Z"
+}

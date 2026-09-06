@@ -1,0 +1,148 @@
+// Version: 4.0.0
+type AccessControlState__757854077 =
+  {
+    var adminAssigned : Bool;
+    userRoles : Map__386906547<Principal, UserRole__1041386557>
+  };
+type ActivityEvent__62302317 =
+  {
+    action : Text;
+    actorPrincipal : Principal;
+    createdAt : Int;
+    id : Nat;
+    projectId : Nat
+  };
+type ActivityEvent__694321485 =
+  {
+    action : Text;
+    actorPrincipal : Principal;
+    createdAt : Int;
+    id : Nat;
+    projectId : Nat
+  };
+type Comment__127652240 =
+  {author : Principal; body : Text; createdAt : Int; id : Nat; taskId : Nat};
+type Comment__972904975 =
+  {author : Principal; body : Text; createdAt : Int; id : Nat; taskId : Nat};
+type Data__265875254<K, V> = {var count : Nat__58649523; kvs : [var ?(K, V)]};
+type Internal__161573640<K, V> =
+  {children : [var ?Node__430031793<K, V>]; data : Data__265875254<K, V>};
+type Leaf__1045638083<K, V> = {data : Data__265875254<K, V>};
+type List__1004628775<T> =
+  {
+    var blockIndex : Nat__58649523;
+    var blocks : [var [var ?T]];
+    var elementIndex : Nat__58649523
+  };
+type List__89170296<T> = List__1004628775<T>;
+type Map__13625999<K, V> =
+  {var root : Node__430031793<K, V>; var size : Nat__58649523};
+type Map__386906547<K, V> = Map__670138087<K, V>;
+type Map__670138087<K, V> = Map__13625999<K, V>;
+type Nat__58649523 = Nat__920180692;
+type Nat__920180692 = Nat;
+type NewActor__655485455 =
+  {
+    accessControlState : AccessControlState__757854077;
+    projects : Map__386906547<Nat, Project__943346903>;
+    projectsState : ProjectsState__403076979;
+    tasksState : TasksState__41234111
+  };
+type Node__430031793<K, V> =
+  {#internal : Internal__161573640<K, V>; #leaf : Leaf__1045638083<K, V>};
+type OldActor__949792082 = {};
+type ProjectMember__517278152 =
+  {joinedAt : Int; role : ProjectRole__693388006; user : Principal};
+type ProjectMember__750109704 =
+  {joinedAt : Int; role : ProjectRole__341106089; user : Principal};
+type ProjectRole__341106089 = {#admin; #member};
+type ProjectRole__693388006 = {#admin; #member};
+type ProjectStatus__514139142 = {#active; #archived; #completed};
+type ProjectStatus__886440159 = {#active; #archived; #completed};
+type Project__614212307 =
+  {
+    createdAt : Int;
+    description : Text;
+    id : Nat;
+    members : [ProjectMember__517278152];
+    name : Text;
+    owner : Principal;
+    status : ProjectStatus__886440159
+  };
+type Project__943346903 =
+  {
+    createdAt : Int;
+    description : Text;
+    id : Nat;
+    members : [ProjectMember__750109704];
+    name : Text;
+    owner : Principal;
+    status : ProjectStatus__514139142
+  };
+type ProjectsState__403076979 = {var nextProjectId : Nat};
+type TaskPriority__639879392 = {#high; #low; #medium};
+type TaskPriority__853325093 = {#high; #low; #medium};
+type TaskStatus__22842975 = {#done; #inProgress; #todo};
+type TaskStatus__843367325 = {#done; #inProgress; #todo};
+type Task__431803600 =
+  {
+    assignee : ?Principal;
+    createdAt : Int;
+    description : Text;
+    dueDate : ?Int;
+    id : Nat;
+    priority : TaskPriority__853325093;
+    projectId : Nat;
+    status : TaskStatus__843367325;
+    title : Text;
+    updatedAt : Int
+  };
+type Task__84639541 =
+  {
+    assignee : ?Principal;
+    createdAt : Int;
+    description : Text;
+    dueDate : ?Int;
+    id : Nat;
+    priority : TaskPriority__639879392;
+    projectId : Nat;
+    status : TaskStatus__22842975;
+    title : Text;
+    updatedAt : Int
+  };
+type TasksState__41234111 =
+  {
+    activity : Map__386906547<Nat, List__89170296<ActivityEvent__694321485>>;
+    comments : Map__386906547<Nat, List__89170296<Comment__127652240>>;
+    var nextActivityId : Nat;
+    var nextCommentId : Nat;
+    var nextTaskId : Nat;
+    tasks : Map__386906547<Nat, Task__84639541>
+  };
+type UserRole__1041386557 = {#admin; #guest; #user};
+type UserRole__91647283 = {#admin; #guest; #user};
+{
+  "20260906_115357" : (_old : OldActor__949792082) -> NewActor__655485455
+}
+actor  {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__386906547<Principal, UserRole__91647283>
+    };
+  stable projects :
+    {
+      var root : Node__430031793<Nat, Project__614212307>;
+      var size : Nat__58649523
+    };
+  stable projectsState : {var nextProjectId : Nat};
+  stable tasksState :
+    {
+      activity : Map__386906547<Nat, List__89170296<ActivityEvent__62302317>>;
+      comments : Map__386906547<Nat, List__89170296<Comment__972904975>>;
+      var nextActivityId : Nat;
+      var nextCommentId : Nat;
+      var nextTaskId : Nat;
+      tasks : Map__386906547<Nat, Task__431803600>
+    }
+};

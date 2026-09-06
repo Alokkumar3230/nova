@@ -1,0 +1,192 @@
+type Value = 
+ variant {
+   "bool": bool;
+   float: float64;
+   "int": int;
+   "nat": nat;
+   "null";
+   "text": text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type TaskStatusCounts = 
+ record {
+   done: nat;
+   inProgress: nat;
+   todo: nat;
+ };
+type TaskStatus = 
+ variant {
+   done;
+   inProgress;
+   todo;
+ };
+type TaskPriority = 
+ variant {
+   high;
+   low;
+   medium;
+ };
+type Task = 
+ record {
+   assignee: opt principal;
+   createdAt: int;
+   description: text;
+   dueDate: opt int;
+   id: nat;
+   priority: TaskPriority;
+   projectId: nat;
+   status: TaskStatus;
+   title: text;
+   updatedAt: int;
+ };
+type Result__1 = 
+ record {
+   hasMore: bool;
+   rows: vec vec Cell;
+ };
+type Result_2 = 
+ variant {
+   err: Error;
+   ok;
+ };
+type Result_1 = 
+ variant {
+   err: ProjectError;
+   ok;
+ };
+type Result = 
+ variant {
+   err: ProjectError;
+   ok: Project;
+ };
+type ProjectStatus = 
+ variant {
+   active;
+   archived;
+   completed;
+ };
+type ProjectRole = 
+ variant {
+   admin;
+   member;
+ };
+type ProjectProgress = 
+ record {
+   doneTasks: nat;
+   name: text;
+   percentDone: nat;
+   projectId: nat;
+   status: ProjectStatus;
+   totalTasks: nat;
+ };
+type ProjectMember = 
+ record {
+   joinedAt: int;
+   role: ProjectRole;
+   user: principal;
+ };
+type ProjectError = 
+ variant {
+   alreadyMember;
+   invalidName;
+   notAuthorized;
+   notFound: nat;
+   notMember;
+ };
+type Project = 
+ record {
+   createdAt: int;
+   description: text;
+   id: nat;
+   members: vec ProjectMember;
+   name: text;
+   owner: principal;
+   status: ProjectStatus;
+ };
+type Error = 
+ variant {
+   AmbiguousAttribute: record {
+                         field: text;
+                         sources: vec text;
+                       };
+   FrontendOriginMismatch: record {
+                             expected: vec text;
+                             got: text;
+                           };
+   FrontendOriginsNotConfigured;
+   MalformedCandid;
+   MissingField: text;
+   MixedSsoSources: record {
+                      otherKeys: vec text;
+                      ssoKeys: vec text;
+                    };
+   NoAttributes;
+   Stale: record {ageNs: nat;};
+   UnknownNonce;
+   UntrustedSsoSource: record {domain: text;};
+ };
+type DashboardSummary = 
+ record {
+   overdueTasks: nat;
+   progress: vec ProjectProgress;
+   taskCounts: TaskStatusCounts;
+   totalProjects: nat;
+ };
+type Comment = 
+ record {
+   author: principal;
+   body: text;
+   createdAt: int;
+   id: nat;
+   taskId: nat;
+ };
+type Cell = 
+ record {
+   name: text;
+   value: Value;
+ };
+type ActivityEvent = 
+ record {
+   action: text;
+   actorPrincipal: principal;
+   createdAt: int;
+   id: nat;
+   projectId: nat;
+ };
+service : {
+  _initialize_access_control: () -> ();
+  _internet_identity_sign_in_finish: () -> (Result_2);
+  _internet_identity_sign_in_start: () -> (blob);
+  addComment: (taskId: nat, body: text) -> (Comment);
+  addMember: (projectId: nat, user: principal) -> (Result_1);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  createProject: (name: text, description: text) -> (Result);
+  createTask: (projectId: nat, title: text, description: text, priority:
+   TaskPriority, assignee: opt principal, dueDate: opt int) -> (Task);
+  deleteProject: (projectId: nat) -> (Result_1);
+  deleteTask: (taskId: nat) -> ();
+  execute: (qJson: text) -> (Result__1) query;
+  getApiDoc: () -> (text) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getDashboard: () -> (DashboardSummary) query;
+  getProject: (projectId: nat) -> (opt Project) query;
+  getTask: (taskId: nat) -> (opt Task) query;
+  isCallerAdmin: () -> (bool) query;
+  listActivity: (projectId: nat) -> (vec ActivityEvent) query;
+  listComments: (taskId: nat) -> (vec Comment) query;
+  listMyProjects: () -> (vec Project) query;
+  listTasks: (projectId: nat) -> (vec Task) query;
+  removeMember: (projectId: nat, user: principal) -> (Result_1);
+  schema: () -> (text) query;
+  setTaskAssignee: (taskId: nat, assignee: opt principal) -> (Task);
+  setTaskStatus: (taskId: nat, status: TaskStatus) -> (Task);
+  updateProject: (projectId: nat, name: text, description: text, status:
+   ProjectStatus) -> (Result);
+  updateTask: (taskId: nat, title: text, description: text, priority:
+   TaskPriority, dueDate: opt int) -> (Task);
+}
